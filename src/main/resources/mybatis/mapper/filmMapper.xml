@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+            "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ray.dao.FilmDao">
+    <resultMap id="film" type="Film">
+        <id property="filmId" column="film_id"></id>
+        <result property="title" column="title"></result>
+        <result property="description" column="description"></result>
+        <result property="originalLanguageId" column="original_language_id"></result>
+        <result property="rentalDuration" column="rental_duration"></result>
+        <result property="rentalRate" column="rental_rate"></result>
+        <result property="length" column="length"></result>
+        <result property="replacementCost" column="replacement_cost"></result>
+        <result property="rating" column="rating"></result>
+        <result property="specialFeatures" column="special_features"></result>
+        <result property="lastUpdate" column="last_update"></result>
+        <association property="language" javaType="Language">
+            <result property="languageId" column="language_id"></result>
+            <result property="name" column="name"></result>
+            <result property="lastUpdate" column="last_update"></result>
+        </association>
+    </resultMap>
+    <!-- insert a Film -->
+    <insert id="insert" parameterType="Film" >
+        INSERT INTO
+             film(title,description,language_id) 
+        VALUE
+            (#{title},#{description},#{languageId})
+    </insert>
+    
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM film WHERE film_id = #{id}
+    </delete>
+    
+    <update id="update" parameterType="Film">
+        UPDATE film 
+        SET title = #{title},description = #{description},language_id = #{language.languageId}
+        WHERE  film_id = #{filmId}
+    </update>
+    
+    <select id="select" parameterType="Page" resultMap="film">
+        SELECT film_id, title, description, name
+        FROM film,language
+        WHERE
+            film.language_id = language.language_id
+        <if test="entity.title != null ">
+            AND title LIKE CONCAT('%', CONCAT(#{entity.title}, '%'))
+        </if>
+        <if test="entity.description != null ">
+            AND description LIKE CONCAT('%', CONCAT(#{entity.description}, '%'))
+        </if>
+        LIMIT #{offset},#{pageSize}
+    </select>
+    
+    <select id="selectCount" parameterType="Film" resultType="int">
+        SELECT count(1)
+        FROM film,language
+        WHERE
+            film.language_id = language.language_id
+        <if test="title != null ">
+            AND title LIKE CONCAT('%', CONCAT(#{title}, '%'))
+        </if>
+        <if test="description != null ">
+            AND description LIKE CONCAT('%', CONCAT(#{description}, '%'))
+        </if>
+    </select>
+</mapper>

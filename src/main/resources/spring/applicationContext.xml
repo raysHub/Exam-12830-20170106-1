@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+    <context:component-scan base-package="com.ray">
+        <context:exclude-filter type="annotation"
+            expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+    <context:annotation-config />
+    <!-- 读取配置文件 -->
+    <context:property-placeholder location="classpath:jdbc/dbconfig.properties" />
+    <!-- 配置数据源 -->
+    <bean id="dataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>${mysql.driver}</value>
+        </property>
+        <property name="url">
+            <value>${mysql.url}</value>
+        </property>
+        <property name="username">
+            <value>${mysql.user}</value>
+        </property>
+        <property name="password">
+            <value>${mysql.password}</value>
+        </property>
+
+    </bean>
+
+    <!-- 配置mybatis信息 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations">
+            <value>classpath*:**/*Mapper.xml</value>
+        </property>
+        <property name="typeAliasesPackage" value="com.ray.dto" />
+    </bean>
+
+    <!-- 统一配置dao层 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ray.dao" />
+    </bean>
+
+    <!-- 配置service -->
+    <!-- <bean name="filmService" class="ray.Exam_12830_20161229_1.service.impl.FilmServiceImpl"> 
+        </bean> -->
+
+    <!-- AOP -->
+    <aop:config>
+        <aop:aspect id="myAspect" ref="myAspect">
+            <aop:pointcut expression="execution(* *..*.service.impl.*.insertFilm(..))"
+                id="myPointCut" />
+            <!-- before advice definition -->
+            <aop:before pointcut-ref="myPointCut" method="beforeAdvice" />
+            <!-- after advice definition -->
+            <aop:after pointcut-ref="myPointCut" method="afterAdvice" />
+        </aop:aspect>
+    </aop:config>
+
+
+</beans>

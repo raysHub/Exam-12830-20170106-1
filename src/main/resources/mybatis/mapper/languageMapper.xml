@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ray.dao.LanguageDao">
+    <select id="findLanguageId" parameterType="int" resultType="int">
+        SELECT count(1) FROM language WHERE language_id = #{id}
+    </select>
+    <select id="findIdByName" parameterType="String" resultType="Long">
+        SELECT language_id 
+        FROM language 
+        WHERE name = #{name}
+    </select>
+    
+</mapper>
