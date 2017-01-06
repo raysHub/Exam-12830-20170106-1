@@ -11,10 +11,6 @@
     <context:component-scan base-package="**.controller" />
     <!-- js img html css 静态资源 -->
     <mvc:default-servlet-handler />
-    <!-- <mvc:view-controller path="/" view-name="/html/login.html"/> <bean 
-        id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
-        <property name="prefix" value="WEB-INF/jsp"></property> <property name="suffix" 
-        value=".jsp"></property> </bean> -->
 
     <mvc:annotation-driven>
         <mvc:message-converters

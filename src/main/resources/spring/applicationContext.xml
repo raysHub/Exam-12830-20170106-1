@@ -48,21 +48,6 @@
         <property name="basePackage" value="com.ray.dao" />
     </bean>
 
-    <!-- 配置service -->
-    <!-- <bean name="filmService" class="ray.Exam_12830_20161229_1.service.impl.FilmServiceImpl"> 
-        </bean> -->
-
-    <!-- AOP -->
-    <aop:config>
-        <aop:aspect id="myAspect" ref="myAspect">
-            <aop:pointcut expression="execution(* *..*.service.impl.*.insertFilm(..))"
-                id="myPointCut" />
-            <!-- before advice definition -->
-            <aop:before pointcut-ref="myPointCut" method="beforeAdvice" />
-            <!-- after advice definition -->
-            <aop:after pointcut-ref="myPointCut" method="afterAdvice" />
-        </aop:aspect>
-    </aop:config>
 
 
 </beans>
