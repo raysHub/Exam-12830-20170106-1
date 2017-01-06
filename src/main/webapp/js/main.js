@@ -69,6 +69,18 @@ function query(queryInfo) {
                             });
                         }
                     });
+                    $operateMenu.children('div').children('div').children('ul').children('li:first').on('click',function(event){
+                        event = event ? event : window.event; 
+                        var source = event.srcElement ? event.srcElement : event.target; 
+                        var $source = $(source);
+                        var $rowNow = $source.parent().parent().parent().parent().parent().parent().parent();
+                        console.log($rowNow.html()+"----------------------")
+                        var $filmId = $rowNow.children("td").eq(0);
+                        console.log($filmId.html()+"----------------------")
+                        deleteFilm(queryInfo,{
+                            filmId:$filmId.html()
+                        });
+                    });
                     $('#userTable').append($template);
                 };
                 
@@ -219,7 +231,23 @@ function update(queryInfo,film){
 });
 }
 
-
+function deleteFilm(queryInfo,film){
+    console.log(film.filmId+"---------------------------");
+    $.ajax({
+        url: "film/delete",
+        type: "GET",
+        dataType: "json",
+        data: film,
+        success: function (flag) {
+            if(flag == 'true'){
+                alert("删除成功");
+                query(queryInfo);
+            }else{
+                alert(flag)
+            }        
+        }
+});
+}
 
 
 

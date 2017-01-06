@@ -38,6 +38,7 @@
         WHERE  film_id = #{filmId}
     </update>
     
+    
     <select id="select" parameterType="Page" resultMap="film">
         SELECT film_id, title, description, name
         FROM film,language

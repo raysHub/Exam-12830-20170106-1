@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ray.dao.FilmDao;
 import com.ray.dao.LanguageDao;
 import com.ray.dto.Film;
@@ -47,8 +48,12 @@ public class FilmServiceImpl implements FilmService {
      */
     @Override
     public boolean deleteFilm(Long id) {
-
-        return false;
+        try {
+            filmDao.deleteById(id);
+        } catch (MySQLIntegrityConstraintViolationException e) {
+           return false;
+        }
+        return true;
     }
 
     /**

@@ -17,10 +17,9 @@ import com.ray.service.FilmService;
 public class FilmController {
     @Autowired
     private FilmService filmService;
-    
-    @RequestMapping(path="/select", method = RequestMethod.GET)
-    public ResponseData<Film> query(
-            @RequestParam(name = "title", required = false, defaultValue = "") String title,
+
+    @RequestMapping(path = "/select", method = RequestMethod.GET)
+    public ResponseData<Film> query(@RequestParam(name = "title", required = false, defaultValue = "") String title,
             @RequestParam(name = "description", required = false, defaultValue = "") String description,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = "100") int pageSize) {
@@ -28,21 +27,28 @@ public class FilmController {
                 .setEntity(new Film().setTitle(title).setDescription(description));
         return filmService.findFilms(p).setPageNow(page);
     }
-    
-    @RequestMapping(path="/update",method = RequestMethod.GET)
-    public String update(
-            @RequestParam(name = "filmId", required = false) Long filmId,
+
+    @RequestMapping(path = "/update", method = RequestMethod.GET)
+    public String update(@RequestParam(name = "filmId", required = false) Long filmId,
             @RequestParam(name = "title", required = false, defaultValue = "") String title,
             @RequestParam(name = "description", required = false, defaultValue = "") String description,
-            @RequestParam(name = "language", required = false, defaultValue = "english") String language){
-        Film film = new Film().setFilmId(filmId).setTitle(title).setDescription(description).setLanguage(new Language().setName(language));
-        if(filmService.updateFilm(film)){
+            @RequestParam(name = "language", required = false, defaultValue = "english") String language) {
+        Film film = new Film().setFilmId(filmId).setTitle(title).setDescription(description)
+                .setLanguage(new Language().setName(language));
+        if (filmService.updateFilm(film)) {
             return "true";
-        }else{
+        } else {
             return "语言输入错误!";
         }
-        
     }
-    
-    
+
+    @RequestMapping(path = "/delete", method = RequestMethod.GET)
+    public String delete(@RequestParam(name = "filmId", required = false) Long filmId) {
+        System.out.println("*************************************"+filmId);
+        if(filmService.deleteFilm(filmId)){
+            return "success";
+        }
+        return "删除失败,有外键关联";
+    }
+
 }
